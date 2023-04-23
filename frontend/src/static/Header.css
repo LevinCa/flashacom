@@ -4,10 +4,11 @@
     align-items: center;
     gap: 1rem;
     background-color: #353535;
+    height: 5rem;
 }
 
 .header img {
-    height: 5vh;
+    height: 75%;
 }
 
 .header .navigation {
