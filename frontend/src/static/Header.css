@@ -1,0 +1,15 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: #353535;
+}
+
+.header img {
+    height: 5vh;
+}
+
+.header .navigation {
+    justify-self: flex-start;
+}
