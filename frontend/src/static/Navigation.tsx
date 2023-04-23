@@ -10,7 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import {useState} from "react";
 import {Menu, People} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
-import "./Navigation.css"
 
 export default function Navigation() {
     const [state, setState] = useState<boolean>(false)
