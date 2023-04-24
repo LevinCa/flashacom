@@ -9,6 +9,12 @@
 
 .header img {
     height: 75%;
+    transition: height 400ms, transform 400ms;
+}
+
+.header img:hover {
+    height: 90%;
+    transform: rotate(360deg);
 }
 
 .header .navigation {

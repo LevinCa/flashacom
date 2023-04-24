@@ -4,6 +4,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import FlatmateOverview from "./flatmate/overview/FlatmateOverview";
 import Header from "./static/Header";
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import HelpModal from "./flatmate/help/HelpModal";
 
 
 const darkTheme = createTheme({
@@ -20,7 +21,7 @@ function App() {
                 <BrowserRouter>
                     <Header/>
                     <Routes>
-                        <Route path={"/flatmate"} element={<FlatmateOverview/>}></Route>
+                        <Route path={"/flatmate"} element={<><HelpModal/><FlatmateOverview/></>}></Route>
                     </Routes>
                 </BrowserRouter>
             </div>

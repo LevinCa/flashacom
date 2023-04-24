@@ -9,4 +9,11 @@ body {
   text-align: center;
 }
 
+.help-modal {
+  opacity: 40%;
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+}
+
 
