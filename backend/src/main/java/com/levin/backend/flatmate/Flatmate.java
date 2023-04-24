@@ -15,6 +15,7 @@ public record Flatmate(
         String firstName,
         @NotBlank
         String lastName,
+        String photoUrl,
         @NotNull
         LocalDate dateOfBirth,
         EatingHabits eatingHabits,

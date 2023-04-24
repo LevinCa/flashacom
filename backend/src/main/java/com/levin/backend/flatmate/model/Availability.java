@@ -5,5 +5,5 @@ public enum Availability {
     OUT_FOR_WORK,
     DO_NOT_DISTURB,
     HOME_OFFICE,
-
+    ABSENT
 }

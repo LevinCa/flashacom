@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: #353535;
+    height: 5rem;
+}
+
+.header img {
+    height: 75%;
+    transition: height 400ms, transform 400ms;
+}
+
+.header img:hover {
+    height: 90%;
+    transform: rotate(360deg);
+}
+
+.header .navigation {
+    justify-self: flex-start;
+}
