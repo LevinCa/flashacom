@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,6 +19,7 @@ import java.time.Month;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,6 +35,7 @@ class FlatmateIntegrationTest {
     private ObjectMapper mapper;
     private Flatmate dummyFlatmate;
     private String jsonDummyFlatmate;
+    private String jsonWithoutId;
 
     @BeforeEach
     void setup() throws JsonProcessingException {
@@ -47,6 +50,27 @@ class FlatmateIntegrationTest {
                 Availability.AT_HOME
         );
         jsonDummyFlatmate = mapper.writeValueAsString(dummyFlatmate);
+        jsonWithoutId = """
+                        {
+                        "firstName":"Levin",
+                        "lastName":"Cagatay",
+                        "photoUrl":"",
+                        "dateOfBirth": "1995-07-07",
+                        "eatingHabits":{
+                            "vegetarian":false,
+                            "vegan":false,
+                            "likes":["Sucuk", "Pizza"],
+                            "dislikes":["Banana"],
+                            "allergies":[]
+                        },
+                        "contact":{
+                            "eMail":"levin.cagatay@gmx.de",
+                            "phone":"12345678",
+                            "payPal": "paypal.me/levincagatay"
+                        },
+                        "availability":"AT_HOME"
+                        }
+                """;
     }
 
     @Test
@@ -63,5 +87,33 @@ class FlatmateIntegrationTest {
         mockMvc.perform(get("/api/flatmate"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" + jsonDummyFlatmate + "]"));
+    }
+
+    @Test
+    @DirtiesContext
+    void postFlatmate_expectFlatmateWithRandomId_whenFlatmateIsAdded() throws Exception {
+        String response = mockMvc.perform(post("/api/flatmate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDummyFlatmate))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(jsonWithoutId))
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Flatmate actual = mapper.readValue(response, Flatmate.class);
+        Flatmate expected = new Flatmate(
+                actual.id(),
+                dummyFlatmate.firstName(),
+                dummyFlatmate.lastName(),
+                dummyFlatmate.photoUrl(),
+                dummyFlatmate.dateOfBirth(),
+                dummyFlatmate.eatingHabits(),
+                dummyFlatmate.contact(),
+                dummyFlatmate.availability()
+        );
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

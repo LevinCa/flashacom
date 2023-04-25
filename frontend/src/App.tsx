@@ -5,6 +5,7 @@ import FlatmateOverview from "./flatmate/overview/FlatmateOverview";
 import Header from "./static/Header";
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import HelpModal from "./flatmate/help/HelpModal";
+import AddModal from "./flatmate/add/AddModal";
 
 
 const darkTheme = createTheme({
@@ -21,7 +22,7 @@ function App() {
                 <BrowserRouter>
                     <Header/>
                     <Routes>
-                        <Route path={"/flatmate"} element={<><HelpModal/><FlatmateOverview/></>}></Route>
+                        <Route path={"/flatmate"} element={<><HelpModal/><FlatmateOverview/><AddModal/></>}></Route>
                     </Routes>
                 </BrowserRouter>
             </div>

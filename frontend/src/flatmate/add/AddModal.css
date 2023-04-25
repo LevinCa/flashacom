@@ -1,0 +1,17 @@
+#add-dial button {
+    height: 100%;
+    width: 100%;
+}
+
+#add-dial:hover {
+    transform: rotate(45deg);
+}
+
+#add-dial:focus {
+    transform: rotate(45deg);
+}
+
+#add-button-actions {
+    display: none;
+}
+

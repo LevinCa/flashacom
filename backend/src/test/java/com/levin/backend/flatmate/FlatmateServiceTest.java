@@ -3,6 +3,7 @@ package com.levin.backend.flatmate;
 import com.levin.backend.flatmate.model.Availability;
 import com.levin.backend.flatmate.model.Contact;
 import com.levin.backend.flatmate.model.EatingHabits;
+import com.levin.backend.service.IdService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,8 @@ import static org.mockito.Mockito.*;
 class FlatmateServiceTest {
 
     private final FlatmateRepository flatmateRepository = mock(FlatmateRepository.class);
-    private final FlatmateService flatmateService = new FlatmateService(flatmateRepository);
+    private final IdService idService = mock(IdService.class);
+    private final FlatmateService flatmateService = new FlatmateService(flatmateRepository, idService);
 
     private Flatmate dummyFlatmate;
 
@@ -61,5 +63,22 @@ class FlatmateServiceTest {
 
         //Then
         assertThat(actual).isInstanceOf(List.class).containsExactly(dummyFlatmate);
+    }
+
+    @Test
+    void saveFlatmate_expectNewFlatmate_WhenFlatmateIsAdded() {
+        //Given
+        when(idService.createId())
+                .thenReturn("1");
+        when(flatmateRepository.save(dummyFlatmate))
+                .thenReturn(dummyFlatmate);
+
+        //When
+        Flatmate actual = flatmateService.saveFlatmate(dummyFlatmate);
+
+        //Then
+        verify(idService).createId();
+        verify(flatmateRepository).save(dummyFlatmate);
+        assertThat(actual).isEqualTo(dummyFlatmate);
     }
 }
