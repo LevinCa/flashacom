@@ -19,6 +19,11 @@ public class FlatmateController {
         return ResponseEntity.ok(flatmateService.findAllFlatmates());
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<Flatmate> getFlatmateById(@PathVariable String id) {
+        return ResponseEntity.ok(flatmateService.findFlatmateById(id));
+    }
+
     @PostMapping
     public ResponseEntity<Flatmate> postFlatmate(@RequestBody Flatmate flatmate) {
         return new ResponseEntity<>(flatmateService.saveFlatmate(flatmate), HttpStatus.CREATED);
