@@ -2,7 +2,12 @@ import {TextField} from "@mui/material";
 import {ChangeEvent} from "react";
 import {Contact} from "../../../model/Flatmate";
 
-export default function FormContactInfo(props: { contact: Contact, contactCompose: (event: ChangeEvent<HTMLInputElement>) => void }) {
+type PropsContact = {
+    contact: Contact,
+    contactCompose: (event: ChangeEvent<HTMLInputElement>) => void
+}
+
+export default function FormContactInfo(props: PropsContact) {
 
     return (
         <form className="form-personal">
