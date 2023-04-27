@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -80,5 +82,34 @@ class FlatmateServiceTest {
         verify(idService).createId();
         verify(flatmateRepository).save(dummyFlatmate);
         assertThat(actual).isEqualTo(dummyFlatmate);
+    }
+
+    @Test
+    void findFlatmateById_expectFlatmateWithId_whenFlatmateExists() {
+        //Given
+        when(flatmateRepository.findById(dummyFlatmate.id()))
+                .thenReturn(Optional.ofNullable(dummyFlatmate));
+
+        //When
+        Flatmate actual = flatmateService.findFlatmateById(dummyFlatmate.id());
+
+        //Then
+        verify(flatmateRepository).findById(dummyFlatmate.id());
+        assertThat(actual).isEqualTo(dummyFlatmate);
+    }
+
+    @Test
+    void findFlatmateById_expectThrowsNoSuchElementException_whenFlatmateDoesntExists() {
+        //Given
+        String nonExistentId = "123456abcdef";
+        when(flatmateRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        //When
+        Throwable actual = catchThrowable(() -> flatmateService.findFlatmateById(nonExistentId));
+
+        //Then
+        verify(flatmateRepository).findById(nonExistentId);
+        assertThat(actual).isInstanceOf(NoSuchElementException.class).hasMessageContaining(nonExistentId);
     }
 }
