@@ -15,3 +15,7 @@
     display: none;
 }
 
+div.add-modal-container {
+    height: 85%;
+    width: 85%;
+}

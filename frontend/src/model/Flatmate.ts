@@ -1,16 +1,24 @@
+import dayjs, {Dayjs} from "dayjs";
 
 export type Flatmate = {
     id: string,
     firstName: string,
     lastName: string,
     photoUrl: string,
-    dateOfBirth: Date,
+    dateOfBirth: Dayjs,
     eatingHabits: EatingHabits,
     contact: Contact,
     availability: string
 }
 
-type EatingHabits = {
+export type PersonalInfo = {
+    firstName: string,
+    lastName: string,
+    photoUrl: string,
+    dateOfBirth: Dayjs
+}
+
+export type EatingHabits = {
     vegetarian: boolean,
     vegan: boolean,
     likes: string[],
@@ -18,8 +26,29 @@ type EatingHabits = {
     allergies: string[]
 }
 
-type Contact = {
+export type Contact = {
     eMail: string,
     phone: string,
     payPal: string
+}
+
+export const dummyFlatmate: Flatmate = {
+    id: "",
+    firstName: "",
+    lastName: "",
+    photoUrl: "",
+    dateOfBirth: dayjs('2000-01-01'),
+    eatingHabits: {
+        vegan: false,
+        vegetarian: false,
+        likes: [],
+        dislikes: [],
+        allergies: []
+    },
+    contact: {
+        eMail: "",
+        phone: "",
+        payPal: ""
+    },
+    availability: "AT_HOME"
 }

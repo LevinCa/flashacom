@@ -3,57 +3,38 @@ import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import './AddModal.css'
+import Modal from "@mui/material/Modal";
+import {style} from "../../model/ModalStyle";
+import AddPagination from "./pagination/AddPagination";
 
 
 export default function AddModal() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
+        <div className="add-modal">
             <SpeedDial
                 ariaLabel="add-button"
                 id="add-dial"
                 sx={{position: 'absolute', bottom: 16, right: 16, width: "3rem", height: "3rem"}}
                 icon={<SpeedDialIcon id="add-icon"/>}
                 openIcon={<SpeedDialIcon/>}
+                onClick={handleOpen}
             >
             </SpeedDial>
-    );
-}
-import * as React from 'react';
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-
-export default function BasicPopover() {
-    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-
-    return (
-        <div>
-            <Button aria-describedby={id} variant="contained" onClick={handleClick}>
-                Open Popover
-            </Button>
-            <Popover
-                id={id}
+            <Modal
                 open={open}
-                anchorEl={anchorEl}
                 onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
+
             >
-                <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
-            </Popover>
+                <Box className="add-modal-container" sx={style}>
+                    <AddPagination/>
+                </Box>
+            </Modal>
         </div>
     );
 }
+
 
