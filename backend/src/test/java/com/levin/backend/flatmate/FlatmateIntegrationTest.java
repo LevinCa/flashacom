@@ -116,4 +116,21 @@ class FlatmateIntegrationTest {
 
         assertThat(actual).isEqualTo(expected);
     }
+
+    @Test
+    @DirtiesContext
+    void getFlatmateById_expectFlatmateWithId_whenFlatmateWithIdExists() throws Exception {
+        String flatmateJson = mockMvc.perform(post("/api/flatmate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDummyFlatmate))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        Flatmate expected = mapper.readValue(flatmateJson, Flatmate.class);
+
+        mockMvc.perform(get("/api/flatmate/" + expected.id()))
+                .andExpect(status().isOk())
+                .andExpect(content().json(jsonWithoutId))
+                .andExpect(jsonPath("$.id").value(expected.id()));
+    }
 }
