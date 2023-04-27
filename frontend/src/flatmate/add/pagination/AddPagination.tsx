@@ -16,7 +16,6 @@ import dayjs, {Dayjs} from "dayjs";
 export default function AddPagination() {
 
     const [activeStep, setActiveStep] = useState(0);
-    const [skipped, setSkipped] = useState(new Set<number>());
     const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({firstName: "", lastName: "", photoUrl: "", dateOfBirth: dayjs('2000-01-01')})
     const [contact, setContact] = useState<Contact>({eMail: "", phone: "", payPal: ""})
     const [food, setFood] = useState<EatingHabits>({
@@ -70,19 +69,8 @@ export default function AddPagination() {
         else if (list === "allergies") setFood({...food, [list]: food.allergies.filter(allergies => allergies !== item)})
     }
 
-    const isStepSkipped = (step: number) => {
-        return skipped.has(step);
-    };
-
     const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
-
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
     };
 
     const handleBack = () => {
@@ -98,14 +86,11 @@ export default function AddPagination() {
             {stepContent[activeStep]}
             <div className="grow-container"></div>
             <Stepper activeStep={activeStep} className="add-stepper">
-                {steps.map((label, index) => {
+                {steps.map(label => {
                     const stepProps: { completed?: boolean } = {};
                     const labelProps: {
                         optional?: React.ReactNode;
                     } = {};
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
-                    }
                     return (
                         <Step key={label} {...stepProps}>
                             <StepLabel {...labelProps}>{label}</StepLabel>
