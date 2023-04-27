@@ -8,13 +8,18 @@ import FormPersonalInfo from "../form-personal-info/FormPersonalInfo";
 import FormEatingHabits from "../form-eating-habits/FormEatingHabits";
 import FormContactInfo from "../form-contact-info/FormContactInfo";
 import './AddPagination.css'
-import {ChangeEvent, useState} from "react";
-import {Contact, EatingHabits, PersonalInfo} from "../../../model/Flatmate";
+import {ChangeEvent, useContext, useState} from "react";
+import {Contact, EatingHabits, Flatmate, PersonalInfo} from "../../../model/Flatmate";
 import dayjs, {Dayjs} from "dayjs";
+import {FlatmateProvider} from "../../../context/FlatmateContext";
 
+type PropsPagination = {
+    setOpen: (open: boolean) => void
+}
 
-export default function AddPagination() {
+export default function AddPagination(props: PropsPagination) {
 
+    const flatmateContext = useContext(FlatmateProvider)
     const [activeStep, setActiveStep] = useState(0);
     const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({firstName: "", lastName: "", photoUrl: "", dateOfBirth: dayjs('2000-01-01')})
     const [contact, setContact] = useState<Contact>({eMail: "", phone: "", payPal: ""})
@@ -70,15 +75,27 @@ export default function AddPagination() {
     }
 
     const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        if (activeStep < steps.length -1) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
+        if (activeStep === steps.length -1) {
+            const newFlatmate: Flatmate = {
+                id: "",
+                firstName: personalInfo.firstName,
+                lastName: personalInfo.lastName,
+                photoUrl: personalInfo.photoUrl,
+                dateOfBirth: personalInfo.dateOfBirth,
+                eatingHabits: food,
+                contact: contact,
+                availability: "AT_HOME"
+            }
+            flatmateContext.post(newFlatmate)
+            props.setOpen(false)
+        }
     };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
     };
 
     return (
@@ -98,14 +115,6 @@ export default function AddPagination() {
                     );
                 })}
             </Stepper>
-            {activeStep === steps.length ? (
-                <React.Fragment>
-                    <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                        <Box sx={{flex: '1 1 auto'}}/>
-                        <Button onClick={handleReset}>Reset</Button>
-                    </Box>
-                </React.Fragment>
-            ) : (
                 <React.Fragment>
                     <Box sx={{display: 'flex', flexDirection: 'row', pt: 2, width: '100%'}}>
                         <Button
@@ -122,7 +131,6 @@ export default function AddPagination() {
                         </Button>
                     </Box>
                 </React.Fragment>
-            )}
         </Box>
     );
 }

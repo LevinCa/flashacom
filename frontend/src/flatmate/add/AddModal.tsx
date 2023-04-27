@@ -6,10 +6,11 @@ import './AddModal.css'
 import Modal from "@mui/material/Modal";
 import {style} from "../../model/ModalStyle";
 import AddPagination from "./pagination/AddPagination";
+import {useState} from "react";
 
 
 export default function AddModal() {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -30,7 +31,7 @@ export default function AddModal() {
 
             >
                 <Box className="add-modal-container" sx={style}>
-                    <AddPagination/>
+                    <AddPagination setOpen={setOpen}/>
                 </Box>
             </Modal>
         </div>
