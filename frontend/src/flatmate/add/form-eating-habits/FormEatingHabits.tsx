@@ -60,12 +60,14 @@ export default function FormEatingHabits(props: PropsFormEatingHabits) {
     function deleteItem(event: React.MouseEvent<HTMLDivElement>): void {
         if (event.currentTarget.ariaLabel === "likes") {
             setLikes(likes.filter(like => like !== event.currentTarget.textContent))
-        } else if (event.currentTarget.accessKey === "dislikes") {
+        } else if (event.currentTarget.ariaLabel === "dislikes") {
             setDislikes(dislikes.filter(dislike => dislike !== event.currentTarget.textContent))
-        } else if (event.currentTarget.accessKey === "allergies") {
+        } else if (event.currentTarget.ariaLabel === "allergies") {
             setAllergies(allergies.filter(allergy => allergy !== event.currentTarget.textContent))
         }
-        props.deleteItem(event.currentTarget.accessKey, event.currentTarget.textContent ? event.currentTarget.textContent : "")
+        if (event.currentTarget.ariaLabel) {
+            props.deleteItem(event.currentTarget.ariaLabel, event.currentTarget.textContent ? event.currentTarget.textContent : "")
+        }
     }
 
     return (
