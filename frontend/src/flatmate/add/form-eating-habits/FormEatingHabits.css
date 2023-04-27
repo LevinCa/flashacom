@@ -1,0 +1,26 @@
+.food-tag-container {
+    overflow: scroll;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3em;
+    padding: 0.5em;
+    max-width: 100%;
+    max-height: calc(2.5 * (0.3rem + 10pt + 0.4em));
+}
+
+.food-tag {
+    cursor: pointer;
+    font-size: 10pt;
+    padding: 0.4em;
+    border-radius: 0.2em;
+    background-color: #838383;
+}
+
+.food-tag:hover {
+    background-color: crimson;
+    color: white;
+}
+
+.form-personal {
+    width: 50%;
+}

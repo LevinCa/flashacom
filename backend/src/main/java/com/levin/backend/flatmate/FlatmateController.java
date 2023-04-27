@@ -1,10 +1,9 @@
 package com.levin.backend.flatmate;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,5 +17,10 @@ public class FlatmateController {
     @GetMapping
     public ResponseEntity<List<Flatmate>> getAllFlatmates() {
         return ResponseEntity.ok(flatmateService.findAllFlatmates());
+    }
+
+    @PostMapping
+    public ResponseEntity<Flatmate> postFlatmate(@RequestBody Flatmate flatmate) {
+        return new ResponseEntity<>(flatmateService.saveFlatmate(flatmate), HttpStatus.CREATED);
     }
 }

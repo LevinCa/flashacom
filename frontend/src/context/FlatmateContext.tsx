@@ -6,8 +6,10 @@ import {toast} from "react-toastify";
 
 export const FlatmateProvider = createContext<{
     allFlatmates: Flatmate[],
+    post: (newFlatmate: Flatmate) => void
 }>({
-    allFlatmates: []
+    allFlatmates: [],
+    post: () => {}
     })
 
 export default function FlatmateContext(props: {children: ReactElement}) {
@@ -24,9 +26,19 @@ export default function FlatmateContext(props: {children: ReactElement}) {
             .catch(() => toast.error("Failed to Load the Data"))
     }
 
+    function postFlatmate(newFlatmate: Flatmate): void {
+        axios.post('/api/flatmate', newFlatmate)
+            .then(() => {
+                setAllFlatmates([...allFlatmates, newFlatmate])
+                toast.success(newFlatmate.firstName + " successfully added")
+            })
+            .catch(() => toast.error("Failed to add Flatmate"))
+    }
+
     return (
         <FlatmateProvider.Provider value={{
-            allFlatmates: allFlatmates
+            allFlatmates: allFlatmates,
+            post: postFlatmate
         }}>
             {props.children}
         </FlatmateProvider.Provider>
