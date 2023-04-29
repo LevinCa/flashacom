@@ -19,7 +19,7 @@ export default function AddModal() {
             <SpeedDial
                 ariaLabel="add-button"
                 id="add-dial"
-                sx={{position: 'absolute', bottom: 16, right: 16, width: "3rem", height: "3rem"}}
+                sx={{position: 'fixed', bottom: 16, right: 16, width: "3rem", height: "3rem"}}
                 icon={<SpeedDialIcon id="add-icon"/>}
                 openIcon={<SpeedDialIcon/>}
                 onClick={handleOpen}
@@ -28,7 +28,6 @@ export default function AddModal() {
             <Modal
                 open={open}
                 onClose={handleClose}
-
             >
                 <Box className="add-modal-container" sx={style}>
                     <AddPagination setOpen={setOpen}/>
