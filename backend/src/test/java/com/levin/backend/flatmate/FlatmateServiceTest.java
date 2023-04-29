@@ -112,4 +112,18 @@ class FlatmateServiceTest {
         verify(flatmateRepository).findById(nonExistentId);
         assertThat(actual).isInstanceOf(NoSuchElementException.class).hasMessageContaining(nonExistentId);
     }
+
+    @Test
+    void updateFlatmate_expectUpdatedFlatmate_whenFlatmateExists() {
+        //Given
+        when(flatmateRepository.save(dummyFlatmate))
+                .thenReturn(dummyFlatmate);
+
+        //When
+        Flatmate actual = flatmateService.updateFlatmate(dummyFlatmate);
+
+        //Then
+        verify(flatmateRepository).save(dummyFlatmate);
+        assertThat(actual).isEqualTo(dummyFlatmate);
+    }
 }
