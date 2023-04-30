@@ -1,20 +1,30 @@
 import {createContext, ReactElement, useEffect, useState} from "react";
-import {Flatmate} from "../model/Flatmate";
+import {dummyFlatmate, Flatmate} from "../model/Flatmate";
 import axios from "axios";
 import {toast} from "react-toastify";
 
 
 export const FlatmateProvider = createContext<{
     allFlatmates: Flatmate[],
-    post: (newFlatmate: Flatmate) => void
+    currentFlatmate: Flatmate,
+    detailsOpen: boolean,
+    setDetailsOpen: (open: boolean) => void,
+    post: (newFlatmate: Flatmate) => void,
+    getDetails: (id: string) => void
 }>({
     allFlatmates: [],
-    post: () => {}
+    currentFlatmate: dummyFlatmate,
+    detailsOpen: false,
+    setDetailsOpen: () => {},
+    post: () => {},
+    getDetails: () => {}
     })
 
 export default function FlatmateContext(props: {children: ReactElement}) {
 
     const [allFlatmates, setAllFlatmates] = useState<Flatmate[]>([])
+    const [currentFlatmate, setCurrentFlatmate] = useState<Flatmate>(dummyFlatmate)
+    const [openDetails, setOpenDetails] = useState<boolean>(false)
 
     useEffect(() => getAllFlatmates(),[])
 
@@ -35,10 +45,22 @@ export default function FlatmateContext(props: {children: ReactElement}) {
             .catch(() => toast.error("Failed to add Flatmate"))
     }
 
+    function getById(id: string): void {
+        axios.get("/api/flatmate/" + id)
+            .then(response => {
+                setCurrentFlatmate(response.data)
+                setOpenDetails(true)
+            })
+    }
+
     return (
         <FlatmateProvider.Provider value={{
             allFlatmates: allFlatmates,
-            post: postFlatmate
+            currentFlatmate: currentFlatmate,
+            detailsOpen: openDetails,
+            setDetailsOpen: setOpenDetails,
+            post: postFlatmate,
+            getDetails: getById
         }}>
             {props.children}
         </FlatmateProvider.Provider>

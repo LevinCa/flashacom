@@ -8,6 +8,7 @@ import HelpModal from "./flatmate/help/HelpModal";
 import AddModal from "./flatmate/add/AddModal";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from '@mui/x-date-pickers';
+import DetailsModal from "./flatmate/details/DetailsModal";
 
 
 const darkTheme = createTheme({
@@ -25,7 +26,7 @@ function App() {
                     <BrowserRouter>
                         <Header/>
                         <Routes>
-                            <Route path={"/flatmate"} element={<><HelpModal/><FlatmateOverview/><AddModal/></>}></Route>
+                            <Route path={"/flatmate"} element={<><HelpModal/><FlatmateOverview/><AddModal/><DetailsModal/></>}></Route>
                         </Routes>
                     </BrowserRouter>
                 </div>

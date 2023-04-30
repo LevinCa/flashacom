@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +30,10 @@ public class FlatmateService {
                 flatmate.availability()
         );
         return flatmateRepository.save(newFlatmate);
+    }
+
+    public Flatmate findFlatmateById(String id) {
+        return flatmateRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Flatmate with ID \"" + id + "\" does not exist"));
     }
 }
