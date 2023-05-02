@@ -10,14 +10,16 @@ export const FlatmateProvider = createContext<{
     detailsOpen: boolean,
     setDetailsOpen: (open: boolean) => void,
     post: (newFlatmate: Flatmate) => void,
-    getDetails: (id: string) => void
+    getDetails: (id: string) => void,
+    putFlatmate: (flatmate: Flatmate) => Promise<void>
 }>({
     allFlatmates: [],
     currentFlatmate: dummyFlatmate,
     detailsOpen: false,
     setDetailsOpen: () => {},
     post: () => {},
-    getDetails: () => {}
+    getDetails: () => {},
+    putFlatmate: () => Promise.prototype
     })
 
 export default function FlatmateContext(props: {children: ReactElement}) {
@@ -26,7 +28,7 @@ export default function FlatmateContext(props: {children: ReactElement}) {
     const [currentFlatmate, setCurrentFlatmate] = useState<Flatmate>(dummyFlatmate)
     const [openDetails, setOpenDetails] = useState<boolean>(false)
 
-    useEffect(() => getAllFlatmates(),[])
+    useEffect(() => getAllFlatmates(),[currentFlatmate])
 
     function getAllFlatmates(): void {
         axios.get("/api/flatmate")
@@ -53,6 +55,11 @@ export default function FlatmateContext(props: {children: ReactElement}) {
             })
     }
 
+    function putFlatmate(flatmate: Flatmate): Promise<void> {
+        return axios.put("/api/flatmate/" + flatmate.id, flatmate)
+            .then(response => setCurrentFlatmate(response.data))
+    }
+
     return (
         <FlatmateProvider.Provider value={{
             allFlatmates: allFlatmates,
@@ -60,7 +67,8 @@ export default function FlatmateContext(props: {children: ReactElement}) {
             detailsOpen: openDetails,
             setDetailsOpen: setOpenDetails,
             post: postFlatmate,
-            getDetails: getById
+            getDetails: getById,
+            putFlatmate: putFlatmate
         }}>
             {props.children}
         </FlatmateProvider.Provider>

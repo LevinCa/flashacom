@@ -19,7 +19,7 @@ export default function DetailsModal() {
             onClose={handleClose}
             disableAutoFocus={true}
         >
-            <Box className="details-modal-container" sx={{...style, height: '90%'}}>
+            <Box className="details-modal-container" sx={{...style, height: '90%', overflow: 'scroll'}}>
                 <DetailsView/>
             </Box>
         </Modal>

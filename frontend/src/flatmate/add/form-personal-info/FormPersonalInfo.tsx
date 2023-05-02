@@ -23,7 +23,9 @@ export default function FormPersonalInfo(props: PropsPersonal) {
     return (
         <div className="form-personal">
             <div className="flatmate-image-container add-image-container border-green">
-                <img src={imgSrc} alt={require('../../../resources/avatar.jpeg')}/>
+                <img src={imgSrc}
+                     onError={event => event.currentTarget.src = require('../../../resources/avatar.jpeg')}
+                     alt="Profile"/>
             </div>
             <form className="form-personal">
                 <div className="form-personal-names">
