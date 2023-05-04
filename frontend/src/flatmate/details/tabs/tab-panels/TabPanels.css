@@ -1,0 +1,31 @@
+.personal-details-view .edit-icon, .contact-details-view .edit-icon, .food-details-view .edit-icon {
+    position: relative;
+    right: -95%;
+}
+
+.personal-details-view .details-line-container {
+    align-items: center;
+}
+
+.personal-details-view, .contact-details-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#details-availability {
+    text-transform: capitalize;
+}
+
+.food-tag.details-tag:hover {
+    background-color: #838383;
+}
+
+.accordion {
+    margin-top: 0.75rem;
+}
+
+.switch-container {
+    display: flex;
+    justify-content: center;
+}

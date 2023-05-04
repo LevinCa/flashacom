@@ -17,10 +17,10 @@ export default function DetailsView() {
         switch (availability) {
             case 'AT_HOME':
                 return 'border-green'
-            case 'OUT_FOR_WORK':
             case 'HOME_OFFICE':
                 return 'border-yellow'
             case 'DO_NOT_DISTURB':
+            case 'OUT_FOR_WORK':
                 return 'border-red'
             default:
                 return 'border-grey'
