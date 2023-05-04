@@ -11,7 +11,8 @@ export const FlatmateProvider = createContext<{
     setDetailsOpen: (open: boolean) => void,
     post: (newFlatmate: Flatmate) => void,
     getDetails: (id: string) => void,
-    putFlatmate: (flatmate: Flatmate) => Promise<void>
+    putFlatmate: (flatmate: Flatmate) => Promise<void>,
+    deleteFlatmate: () => void
 }>({
     allFlatmates: [],
     currentFlatmate: dummyFlatmate,
@@ -19,7 +20,8 @@ export const FlatmateProvider = createContext<{
     setDetailsOpen: () => {},
     post: () => {},
     getDetails: () => {},
-    putFlatmate: () => Promise.prototype
+    putFlatmate: () => Promise.prototype,
+    deleteFlatmate: () => {}
     })
 
 export default function FlatmateContext(props: {children: ReactElement}) {
@@ -60,6 +62,16 @@ export default function FlatmateContext(props: {children: ReactElement}) {
             .then(response => setCurrentFlatmate(response.data))
     }
 
+    function deleteFlatmate(): void {
+        axios.delete("/api/flatmate/" + currentFlatmate.id)
+            .then(() => {
+                setCurrentFlatmate(dummyFlatmate)
+                setAllFlatmates(allFlatmates.filter(flatmate => flatmate.id !== currentFlatmate.id))
+                setOpenDetails(false)
+            })
+            .catch(() => toast.error("Failed to delete"))
+    }
+
     return (
         <FlatmateProvider.Provider value={{
             allFlatmates: allFlatmates,
@@ -68,7 +80,8 @@ export default function FlatmateContext(props: {children: ReactElement}) {
             setDetailsOpen: setOpenDetails,
             post: postFlatmate,
             getDetails: getById,
-            putFlatmate: putFlatmate
+            putFlatmate: putFlatmate,
+            deleteFlatmate: deleteFlatmate
         }}>
             {props.children}
         </FlatmateProvider.Provider>

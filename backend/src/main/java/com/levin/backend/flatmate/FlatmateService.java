@@ -40,4 +40,8 @@ public class FlatmateService {
     public Flatmate updateFlatmate(Flatmate flatmate) {
         return flatmateRepository.save(flatmate);
     }
+
+    public void deleteFlatmate(String id) {
+        flatmateRepository.delete(flatmateRepository.findById(id).orElseThrow(NoSuchElementException::new));
+    }
 }
