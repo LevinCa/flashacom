@@ -5,7 +5,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {ChangeEvent, useContext, useState} from "react";
+import {ChangeEvent, useContext, useEffect, useState} from "react";
 import {Close, Edit} from "@mui/icons-material";
 import {FormControl, FormControlLabel, Input, InputLabel, Switch} from "@mui/material";
 import Button from "@mui/material/Button";
@@ -21,6 +21,12 @@ export default function FoodDetailsView() {
     const [vegetarianChecked, setVegetarianChecked] = useState<boolean>(flatmateContext.currentFlatmate.eatingHabits.vegetarian)
     const [vegetarianDisabled, setVegetarianDisabled] = useState<boolean>(flatmateContext.currentFlatmate.eatingHabits.vegan)
     const [food, setFood] = useState<EatingHabits>(flatmateContext.currentFlatmate.eatingHabits)
+    const [cssNotEditable, setCssNotEditable] = useState<string>("")
+
+    useEffect(() => {
+        if (!editable) setCssNotEditable(" details-tag")
+        else setCssNotEditable("")
+    }, [editable])
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -90,7 +96,7 @@ export default function FoodDetailsView() {
                         </FormControl>}
                     <div className="food-tag-container">
                         {food.likes.map(like => {
-                            return <div className="food-tag details-tag" aria-label="likes" key={like}
+                            return <div className={"food-tag".concat(cssNotEditable)} aria-label="likes" key={like}
                                         onClick={deleteItem}
                             >{like}</div>
                         })}
@@ -113,7 +119,7 @@ export default function FoodDetailsView() {
                         </FormControl>}
                     <div className="food-tag-container">
                         {food.dislikes.map(dislike => {
-                            return <div className="food-tag details-tag" aria-label="dislikes" key={dislike}
+                            return <div className={"food-tag".concat(cssNotEditable)} aria-label="dislikes" key={dislike}
                                         onClick={deleteItem}
                             >{dislike}</div>
                         })}
@@ -136,7 +142,7 @@ export default function FoodDetailsView() {
                         </FormControl>}
                     <div className="food-tag-container">
                         {food.allergies.map(allergies => {
-                            return <div className="food-tag details-tag" aria-label="allergies" key={allergies}
+                            return <div className={"food-tag".concat(cssNotEditable)} aria-label="allergies" key={allergies}
                                         onClick={deleteItem}
                             >{allergies}</div>
                         })}
