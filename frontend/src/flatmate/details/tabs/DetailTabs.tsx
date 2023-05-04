@@ -53,7 +53,7 @@ export default function DetailTabs(props: {flatmate: Flatmate}) {
                 <PersonalDetailsView flatmate={props.flatmate}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <FoodDetailsView flatmate={props.flatmate}/>
+                <FoodDetailsView/>
             </TabPanel>
             <TabPanel value={value} index={2}>
                 <ContactDetailsView flatmate={props.flatmate}/>

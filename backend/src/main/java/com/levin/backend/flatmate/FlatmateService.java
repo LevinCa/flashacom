@@ -36,4 +36,8 @@ public class FlatmateService {
         return flatmateRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Flatmate with ID \"" + id + "\" does not exist"));
     }
+
+    public Flatmate updateFlatmate(Flatmate flatmate) {
+        return flatmateRepository.save(flatmate);
+    }
 }

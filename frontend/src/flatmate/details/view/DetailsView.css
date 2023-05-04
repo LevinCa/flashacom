@@ -5,9 +5,10 @@
 }
 
 .details-view .flatmate-image-container {
-    width: 10vw;
-    height: 10vw;
-    padding: calc(0.03 * 10vw);
+    width: max(10vw, 10vh);
+    height: max(10vw, 10vh);
+    padding: calc(0.03 * max(10vw, 10vh));
+    overflow: visible;
 }
 
 .details-view {
@@ -24,5 +25,25 @@
 .details-line-container {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
+}
+
+.edit-icon {
+    position: absolute;
+    top: 5%;
+    right: 0;
+    width: calc(0.2 * max(10vw, 10vh));
+    height: calc(0.2 * max(10vw, 10vh));
+    transition: transform 500ms;
+}
+
+.edit-icon:hover {
+    transform: translate(-10%, -15%);
+}
+
+.details-view form {
+    display: flex;
+    width: 100%;
+    gap: 0.5rem;
     align-items: baseline;
 }

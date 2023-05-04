@@ -133,4 +133,66 @@ class FlatmateIntegrationTest {
                 .andExpect(content().json(jsonWithoutId))
                 .andExpect(jsonPath("$.id").value(expected.id()));
     }
+
+    @Test
+    @DirtiesContext
+    void putFlatmate_expectUpdateFlatmate_whenFlatmateAlreadyExists() throws Exception {
+        String jsonResponse = mockMvc.perform(post("/api/flatmate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDummyFlatmate))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        Flatmate response = mapper.readValue(jsonResponse, Flatmate.class);
+        Flatmate expected = new Flatmate(
+                response.id(),
+                "New First Name",
+                response.lastName(),
+                response.photoUrl(),
+                response.dateOfBirth(),
+                response.eatingHabits(),
+                response.contact(),
+                response.availability()
+        );
+        String jsonExpected = mapper.writeValueAsString(expected);
+
+        String jsonActual = mockMvc.perform(put("/api/flatmate/" + expected.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonExpected))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json(jsonExpected))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        Flatmate actual = mapper.readValue(jsonActual, Flatmate.class);
+
+        assertThat(actual).isEqualTo(expected).isNotEqualTo(dummyFlatmate);
+    }
+
+    @Test
+    @DirtiesContext
+    void putFlatmate_expectCreateFlatmate_whenFlatmateDoesntExists() throws Exception {
+        String jsonActual = mockMvc.perform(put("/api/flatmate/" + dummyFlatmate.id())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDummyFlatmate))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(jsonWithoutId))
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        Flatmate actual = mapper.readValue(jsonActual, Flatmate.class);
+        Flatmate expected = new Flatmate(
+                actual.id(),
+                dummyFlatmate.firstName(),
+                dummyFlatmate.lastName(),
+                dummyFlatmate.photoUrl(),
+                dummyFlatmate.dateOfBirth(),
+                dummyFlatmate.eatingHabits(),
+                dummyFlatmate.contact(),
+                dummyFlatmate.availability()
+        );
+
+        assertThat(actual).isEqualTo(expected).isNotEqualTo(dummyFlatmate);
+    }
 }
