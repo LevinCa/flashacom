@@ -38,4 +38,10 @@ public class FlatmateController {
         }
         return new ResponseEntity<>(flatmateService.saveFlatmate(flatmate), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteFlatmate(@PathVariable String id) {
+        flatmateService.deleteFlatmate(id);
+        return ResponseEntity.noContent().build();
+    }
 }

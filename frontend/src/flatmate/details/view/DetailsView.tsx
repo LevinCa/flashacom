@@ -67,6 +67,7 @@ export default function DetailsView() {
                 <a href={"https://" + flatmateContext.currentFlatmate.contact.payPal}><PaymentRounded color="primary"/></a>
             </div>
             <DetailTabs flatmate={flatmateContext.currentFlatmate}/>
+            <Button type="button" color="error" fullWidth={true} onClick={() => flatmateContext.deleteFlatmate()}>Delete</Button>
         </div>
     )
 }
