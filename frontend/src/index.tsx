@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import FlatmateContext from "./context/FlatmateContext";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import RoomContext from "./context/RoomContext";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -13,9 +14,11 @@ const root = ReactDOM.createRoot(
 root.render(
     <React.StrictMode>
         <ToastContainer theme="dark"/>
-        <FlatmateContext>
-            <App/>
-        </FlatmateContext>
+        <RoomContext>
+            <FlatmateContext>
+                <App/>
+            </FlatmateContext>
+        </RoomContext>
     </React.StrictMode>
 );
 

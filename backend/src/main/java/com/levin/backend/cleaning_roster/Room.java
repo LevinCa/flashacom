@@ -10,11 +10,12 @@ public record Room(
         String id,
         String name,
         int imageIndex,
-        int size_x,
-        int size_y,
+        int rowSpan,
+        int columnSpan,
         Map<Task, String> assignments
 ) {
+
         public Room withId(String id) {
-                return new Room(id, this.name, this.imageIndex, this.size_x, this.size_y, this.assignments);
+                return new Room(id, this.name, this.imageIndex, this.rowSpan, this.columnSpan, this.assignments);
         }
 }
