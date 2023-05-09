@@ -12,14 +12,13 @@ import {ChangeEvent, useContext, useState} from "react";
 import {Contact, EatingHabits, Flatmate, PersonalInfo} from "../../../model/Flatmate";
 import dayjs, {Dayjs} from "dayjs";
 import {FlatmateProvider} from "../../../context/FlatmateContext";
+import {FormProvider} from "../../../context/FormContext";
 
-type PropsPagination = {
-    setOpen: (open: boolean) => void
-}
 
-export default function AddPagination(props: PropsPagination) {
+export default function AddPagination() {
 
     const flatmateContext = useContext(FlatmateProvider)
+    const formContext = useContext(FormProvider)
     const [activeStep, setActiveStep] = useState(0);
     const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({firstName: "", lastName: "", photoUrl: "", dateOfBirth: dayjs('2000-01-01')})
     const [contact, setContact] = useState<Contact>({eMail: "", phone: "", payPal: ""})
@@ -90,7 +89,7 @@ export default function AddPagination(props: PropsPagination) {
                 availability: "AT_HOME"
             }
             flatmateContext.post(newFlatmate)
-            props.setOpen(false)
+            formContext.setAddModalOpen(false)
         }
     };
 

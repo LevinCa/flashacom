@@ -6,13 +6,16 @@ import './AddModal.css'
 import Modal from "@mui/material/Modal";
 import {style} from "../../model/ModalStyle";
 import AddPagination from "./pagination/AddPagination";
-import {useState} from "react";
+import {ReactElement, useContext, useState} from "react";
+import {FormProvider} from "../../context/FormContext";
 
 
-export default function AddModal() {
-    const [open, setOpen] = useState<boolean>(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+export default function AddModal(props: {element: ReactElement}) {
+
+    const formContext = useContext(FormProvider)
+
+    const handleOpen = () => formContext.setAddModalOpen(true);
+    const handleClose = () => formContext.setAddModalOpen(false);
 
     return (
         <div className="add-modal">
@@ -26,11 +29,11 @@ export default function AddModal() {
             >
             </SpeedDial>
             <Modal
-                open={open}
+                open={formContext.addModalOpen}
                 onClose={handleClose}
             >
                 <Box className="add-modal-container" sx={style}>
-                    <AddPagination setOpen={setOpen}/>
+                    {props.element}
                 </Box>
             </Modal>
         </div>

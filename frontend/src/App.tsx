@@ -10,6 +10,8 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from '@mui/x-date-pickers';
 import DetailsModal from "./flatmate/details/DetailsModal";
 import RosterGrid from "./cleaning-roster/overview/RosterGrid";
+import AddPagination from "./flatmate/add/pagination/AddPagination";
+import AddRoom from "./cleaning-roster/add/AddRoom";
 
 
 const darkTheme = createTheme({
@@ -30,10 +32,13 @@ function App() {
                             <Route path={"/flatmate"} element={<>
                                 <HelpModal/>
                                 <FlatmateOverview/>
-                                <AddModal/>
+                                <AddModal element={<AddPagination/>}/>
                                 <DetailsModal/>
                             </>}></Route>
-                            <Route path={"/cleaning-roster"} element={<RosterGrid/>}/>
+                            <Route path={"/cleaning-roster"} element={<>
+                                <RosterGrid/>
+                                <AddModal element={<AddRoom/>}/>
+                            </>}/>
                         </Routes>
                     </BrowserRouter>
                 </div>
