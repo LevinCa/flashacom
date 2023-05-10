@@ -14,7 +14,7 @@ export default function RoomGridItem(props: { room: Room }) {
             .concat(props.room.columnSpan as unknown as string)
     }
 
-    const image: string = require("../../resources/".concat(props.room.imageIndex as unknown as string).concat(".jpeg"))
+    const image: string = require("../../resources/".concat(props.room.imageProperties.imageIndex as unknown as string).concat(".jpeg"))
 
     const style = {
         backgroundImage: "url(" + image + ")",

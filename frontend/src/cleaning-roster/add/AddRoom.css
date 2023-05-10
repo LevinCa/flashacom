@@ -1,5 +1,38 @@
+.add-room {
+    height: 100%;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 .add-room label {
-    font-size: 1.5rem;
+    font-size: 1rem;
+}
+
+.icon-label-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#add-room-flex-container-name {
+    display: flex;
+    justify-content: center;
+}
+
+.add-room-flex-container {
+    width: 100%;
+}
+
+.add-room-name-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.rotate-icon {
+    cursor: pointer;
+    width: fit-content;
 }
 
 .shape-container {
@@ -12,6 +45,7 @@
 }
 
 .shape-item {
+    cursor: pointer;
     background-color: #333333;
     display: flex;
     justify-content: center;
@@ -19,14 +53,16 @@
     border-radius: 0.5rem;
     padding: 3px;
     transition: all 500ms;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
-.shape-item:hover {
+.shape-item:hover, .background-item:hover {
     transform: translateY(-0.3rem);
     box-shadow: #838383 0.3rem 0.3rem 1rem;
 }
 
-.active-shape-item {
+.active-shape-item, .active-image-item {
     transform: translateY(-0.3rem);
     box-shadow: #838383 0.3rem 0.3rem 1rem;
 }
@@ -74,4 +110,55 @@
 .shape-item-3-3 {
     width: calc(3 * var(--size));
     height: calc(3 * var(--size));
+}
+
+.background-item-container {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-evenly;
+}
+
+.background-item {
+    cursor: pointer;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    overflow: clip;
+    transition: all 500ms;
+}
+
+.background-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.slider-container label {
+    text-align: center;
+}
+
+.add-room-slider {
+    margin: 1rem 1rem 0 1rem;
+    width: calc(100% - 1rem);
+}
+
+@media screen and (max-width: 600px) {
+    .filter-container {
+        flex-direction: column;
+    }
 }
