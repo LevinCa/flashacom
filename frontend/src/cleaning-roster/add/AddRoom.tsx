@@ -198,11 +198,11 @@ export default function AddRoom() {
             <div className="add-room-flex-container">
                 <label htmlFor="add-room-background">Background: </label>
                 <div id="add-room-background" className="background-item-container">
-                    {imageList.map((_, index) => {
+                    {imageList.map((image, index) => {
                         return (
                             <div
                                 className={"background-item".concat(imageIndex === index ? imageCssActive : "")}
-                                key={index}
+                                key={image}
                                 onClick={() => {
                                     setImageIndex(index)
                                 }}

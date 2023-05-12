@@ -5,8 +5,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import './AddModal.css'
 import Modal from "@mui/material/Modal";
 import {style} from "../../model/ModalStyle";
-import AddPagination from "./pagination/AddPagination";
-import {ReactElement, useContext, useState} from "react";
+import {ReactElement, useContext} from "react";
 import {FormProvider} from "../../context/FormContext";
 
 

@@ -11,7 +11,7 @@ export default function RosterGrid() {
         <div className="overview-grid">
             {roomContext.allRooms.map(room => {
                 return(
-                    <RoomGridItem room={room}/>
+                    <RoomGridItem key={room.id} room={room}/>
                 )
             })}
         </div>
