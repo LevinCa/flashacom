@@ -5,6 +5,9 @@
     gap: 1rem;
     background-color: #353535;
     height: 5rem;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .header img {

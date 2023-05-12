@@ -8,7 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {useState} from "react";
-import {Menu, People} from "@mui/icons-material";
+import {CleaningServicesRounded, Menu, People} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
 export default function Navigation() {
@@ -45,7 +45,14 @@ export default function Navigation() {
                             <ListItemText primary="Flatmates"/>
                         </ListItemButton>
                     </ListItem>
-
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => navigate("/cleaning-roster")}>
+                        <ListItemIcon>
+                            <CleaningServicesRounded/>
+                        </ListItemIcon>
+                        <ListItemText primary="Cleaning Roster"/>
+                    </ListItemButton>
+                </ListItem>
             </List>
         </Box>
     )

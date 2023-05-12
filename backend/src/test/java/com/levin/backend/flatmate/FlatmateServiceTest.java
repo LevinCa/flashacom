@@ -126,4 +126,19 @@ class FlatmateServiceTest {
         verify(flatmateRepository).save(dummyFlatmate);
         assertThat(actual).isEqualTo(dummyFlatmate);
     }
+
+    @Test
+    void deleteFlatmate_expectNoSuchElementException_whenFlatmateDoesntExist() {
+        //Given
+        String nonExistentId = "Non Existent ID";
+        when(flatmateRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        //When
+        Throwable actual = catchThrowable(() -> flatmateService.deleteFlatmate(nonExistentId));
+
+        //Then
+        verify(flatmateRepository).findById(nonExistentId);
+        assertThat(actual).isInstanceOf(NoSuchElementException.class);
+    }
 }

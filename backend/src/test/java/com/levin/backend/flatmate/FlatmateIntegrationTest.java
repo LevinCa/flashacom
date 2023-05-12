@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -194,5 +195,31 @@ class FlatmateIntegrationTest {
         );
 
         assertThat(actual).isEqualTo(expected).isNotEqualTo(dummyFlatmate);
+    }
+
+
+    @Test
+    @DirtiesContext
+    void deleteFlatmate_expectDeleted_whenFlatmateExists() throws Exception {
+        String response = mockMvc.perform(post("/api/flatmate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(jsonDummyFlatmate))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Flatmate toDelete = mapper.readValue(response, Flatmate.class);
+
+        mockMvc.perform(delete("/api/flatmate/" + toDelete.id()))
+                .andExpect(status().isNoContent());
+    }
+
+
+    @Test
+    void deleteFlatmate_expectNoSuchElementException_whenFlatmateDoesntExist() {
+        Throwable actual = catchThrowable(() -> mockMvc.perform(delete("/api/flatmate/" + "Non Existent ID"))
+                .andExpect(status().isNotFound()));
+
+        assertThat(actual.getCause()).isInstanceOf(NoSuchElementException.class);
     }
 }
