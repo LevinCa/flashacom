@@ -11,10 +11,14 @@ import background5 from '../../resources/5.jpeg'
 import background6 from '../../resources/6.jpeg'
 import {FormControlLabel, FormGroup, Slider, Switch, TextField} from "@mui/material";
 import Button from "@mui/material/Button";
+import {Room} from "../../model/Room";
+import {FormProvider} from "../../context/FormContext";
+import {toast} from "react-toastify";
 
 export default function AddRoom() {
 
     const roomContext = useContext(RoomProvider)
+    const formContext = useContext(FormProvider)
     const [name, setName] = useState<string>("")
     const [isVertical, setIsVertical] = useState<boolean>(false)
     const [shapeIndex, setShapeIndex] = useState<number>(0)
@@ -56,12 +60,71 @@ export default function AddRoom() {
             "brightness(" + brightnessChange + "%)",
     }
 
-    function onImageClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-
-    }
-
     function addRoom() {
-
+        let rowSpan: number = 0
+        let colSpan: number = 0
+        switch (shapeIndex) {
+            case 1:
+                colSpan = 1
+                rowSpan = 1
+                break
+            case 2:
+                colSpan = 1
+                rowSpan = 2
+                break
+            case 3:
+                colSpan = 1
+                rowSpan = 3
+                break
+            case 4:
+                colSpan = 2
+                rowSpan = 1
+                break
+            case 5:
+                colSpan = 2
+                rowSpan = 2
+                break
+            case 6:
+                colSpan = 2
+                rowSpan = 3
+                break
+            case 7:
+                colSpan = 3
+                rowSpan = 1
+                break
+            case 8:
+                colSpan = 3
+                rowSpan = 2
+                break
+            case 9:
+                colSpan = 3
+                rowSpan = 3
+                break
+        }
+        const isValid: boolean = (
+            (0 < colSpan) && (colSpan < 4)
+            && (0 < rowSpan) && (rowSpan < 4)
+            && (-1 < imageIndex) && (imageIndex < imageList.length))
+        if (isValid) {
+            const newRoom: Room = {
+                id: "",
+                name: name,
+                imageProperties: {
+                    index: imageIndex,
+                    hue: hueChange,
+                    brightness: brightnessChange,
+                    isInverted: isInvert,
+                    isBlackAndWhite: isBnW,
+                    isOverSaturated: isSaturated
+                },
+                rowSpan: rowSpan,
+                columnSpan: colSpan,
+                assignments: new Map<string, string>()
+            }
+            roomContext.post(newRoom)
+            formContext.setAddModalOpen(false)
+        }
+        else toast.error("Missing Inputs")
     }
 
     return (
@@ -81,8 +144,8 @@ export default function AddRoom() {
                     setIsVertical(!isVertical)
                     setShapeIndex(0)
                 }}>
-                </div>
                     {isVertical ? <AutorenewRounded/> : <CachedRounded/>}
+                </div>
                 </div>
                 <div id="add-room-shape" className="shape-container">
                     <div className={"shape-item shape-item-1-1".concat(shapeIndex === 1 ? shapeCssActive : "")}
@@ -140,8 +203,7 @@ export default function AddRoom() {
                             <div
                                 className={"background-item".concat(imageIndex === index ? imageCssActive : "")}
                                 key={index}
-                                onClick={event => {
-                                    onImageClick(event)
+                                onClick={() => {
                                     setImageIndex(index)
                                 }}
                                 id={"background-item-".concat(index as unknown as string)}>

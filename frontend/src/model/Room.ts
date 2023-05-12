@@ -8,7 +8,7 @@ export type Room = {
 }
 
 export type ImageProperties = {
-    imageIndex: number,
+    index: number,
     hue: number,
     brightness: number,
     isInverted: boolean
@@ -17,7 +17,7 @@ export type ImageProperties = {
 }
 
 export const dummyImageProperties: ImageProperties = {
-    imageIndex: 7,
+    index: 7,
     hue: 0,
     brightness: 0,
     isInverted: false,

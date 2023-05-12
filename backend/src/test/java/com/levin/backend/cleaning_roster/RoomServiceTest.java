@@ -1,5 +1,6 @@
 package com.levin.backend.cleaning_roster;
 
+import com.levin.backend.cleaning_roster.model.ImageProperties;
 import com.levin.backend.service.IdService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,13 @@ class RoomServiceTest {
         dummyRoom = new Room(
                 "123",
                 "Small Bathroom",
-                0,
+                new ImageProperties(
+                        0,
+                        0,
+                        0,
+                        false,
+                        false,
+                        false),
                 0,
                 0,
                 Collections.emptyMap()

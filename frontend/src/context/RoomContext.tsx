@@ -7,11 +7,13 @@ import {toast} from "react-toastify";
 export const RoomProvider = createContext<{
     allRooms: Room[],
     currentRoom: Room,
-    setCurrentRoom: (room: Room) => void
+    setCurrentRoom: (room: Room) => void,
+    post: (room: Room) => void
 }>({
     allRooms: [],
     currentRoom: dummyRoom,
-    setCurrentRoom: () => {}
+    setCurrentRoom: () => {},
+    post: () => {}
 })
 
 export default function RoomContext(props: {children: ReactElement}) {
@@ -30,11 +32,21 @@ export default function RoomContext(props: {children: ReactElement}) {
             .catch(() => toast.error("Failed to retrieve Data"))
     }
 
+    function postNewRoom(room: Room): void {
+        axios.post("/api/room", room)
+            .then(response => {
+                setAllRooms([...allRooms, response.data])
+                toast.success("Room successfully added")
+            })
+            .catch(() => toast.error("Failed to add Room"))
+    }
+
     return (
         <RoomProvider.Provider value={{
             allRooms: allRooms,
             currentRoom: currentRoom,
-            setCurrentRoom: setCurrentRoom
+            setCurrentRoom: setCurrentRoom,
+            post: postNewRoom
         }}>
             {props.children}
         </RoomProvider.Provider>
