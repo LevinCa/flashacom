@@ -1,6 +1,5 @@
 .room-edit-modal {
-    display: flex;
-    z-index: 5;
+
 }
 
 .edit-room-flatmate-container {
@@ -44,6 +43,7 @@
     justify-content: space-evenly;
     padding-top: 2rem;
     padding-bottom: 2rem;
+    z-index: 5;
 }
 
 .edit-room-container {
