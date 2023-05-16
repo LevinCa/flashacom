@@ -1,7 +1,9 @@
-import {createContext, ReactElement, useEffect, useState} from "react";
+import {createContext, ReactElement, useContext, useEffect, useState} from "react";
 import {dummyFlatmate, Flatmate} from "../model/Flatmate";
 import axios from "axios";
 import {toast} from "react-toastify";
+import {RoomProvider} from "./RoomContext";
+import {Room} from "../model/Room";
 
 
 export const FlatmateProvider = createContext<{
@@ -12,7 +14,9 @@ export const FlatmateProvider = createContext<{
     post: (newFlatmate: Flatmate) => void,
     getDetails: (id: string) => void,
     putFlatmate: (flatmate: Flatmate) => Promise<void>,
-    deleteFlatmate: () => void
+    deleteFlatmate: () => void,
+    assignees: Flatmate[],
+    setAssignees: (flatmate: Flatmate[]) => void
 }>({
     allFlatmates: [],
     currentFlatmate: dummyFlatmate,
@@ -21,16 +25,37 @@ export const FlatmateProvider = createContext<{
     post: () => {},
     getDetails: () => {},
     putFlatmate: () => Promise.prototype,
-    deleteFlatmate: () => {}
+    deleteFlatmate: () => {},
+    assignees: [],
+    setAssignees: () => {}
     })
 
 export default function FlatmateContext(props: {children: ReactElement}) {
 
+    const roomContext = useContext(RoomProvider)
     const [allFlatmates, setAllFlatmates] = useState<Flatmate[]>([])
     const [currentFlatmate, setCurrentFlatmate] = useState<Flatmate>(dummyFlatmate)
     const [openDetails, setOpenDetails] = useState<boolean>(false)
+    const [unassigned, setUnassigned] = useState<Flatmate[]>([])
 
-    useEffect(() => getAllFlatmates(),[currentFlatmate])
+    useEffect(() => {
+        getAllFlatmates()
+    },[currentFlatmate])
+
+    useEffect(() => {
+        checkUnassigned()
+    },[roomContext.currentRoom])
+
+    function checkUnassigned(): void {
+        let assigneesList: Flatmate[] = allFlatmates
+        for (const flatmate of assigneesList) {
+            let assignedRooms: Room[] = roomContext.allRooms.filter(room => room.assignments.includes(flatmate.id))
+            if (assignedRooms.length > 0) {
+                assigneesList = assigneesList.filter(assignedFlatmate => flatmate !== assignedFlatmate)
+            }
+        }
+        setUnassigned(assigneesList)
+    }
 
     function getAllFlatmates(): void {
         axios.get("/api/flatmate")
@@ -81,7 +106,9 @@ export default function FlatmateContext(props: {children: ReactElement}) {
             post: postFlatmate,
             getDetails: getById,
             putFlatmate: putFlatmate,
-            deleteFlatmate: deleteFlatmate
+            deleteFlatmate: deleteFlatmate,
+            assignees: unassigned,
+            setAssignees: setUnassigned
         }}>
             {props.children}
         </FlatmateProvider.Provider>

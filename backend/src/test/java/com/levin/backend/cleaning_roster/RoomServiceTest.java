@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,7 +36,7 @@ class RoomServiceTest {
                         false),
                 0,
                 0,
-                Collections.emptyMap()
+                Collections.emptyList()
         );
     }
 
@@ -81,5 +83,40 @@ class RoomServiceTest {
         verify(idService).createId();
         verify(roomRepository).save(dummyRoom.withId("777"));
         assertThat(actual).isEqualTo(dummyRoom.withId("777")).isNotEqualTo(dummyRoom);
+    }
+
+    @Test
+    void editAssignments_expectRoomWithEditedAssignments_whenRoomExists() {
+        //Given
+        List<String> assignments = List.of("1");
+        Room expected = dummyRoom.withAssignments(assignments);
+        when(roomRepository.findById(dummyRoom.id()))
+                .thenReturn(Optional.of(dummyRoom));
+        when(roomRepository.save(dummyRoom.withAssignments(assignments)))
+                .thenReturn(dummyRoom.withAssignments(assignments));
+
+        //When
+        Room actual = roomService.editAssignments(dummyRoom.id(), assignments);
+
+        //Then
+        verify(roomRepository).findById(dummyRoom.id());
+        verify(roomRepository).save(dummyRoom.withAssignments(assignments));
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void editAssignments_expectNoSuchElementException_whenRoomDoesntExists() {
+        //Given
+        List<String> assignments = List.of("1");
+        String nonExistentId = "does not exist";
+        when(roomRepository.findById(nonExistentId))
+                .thenReturn(Optional.empty());
+
+        //When
+        Throwable actual = catchThrowable(() -> roomService.editAssignments(dummyRoom.id(), assignments));
+
+        //Then
+        verify(roomRepository).findById(dummyRoom.id());
+        assertThat(actual).isInstanceOf(NoSuchElementException.class);
     }
 }

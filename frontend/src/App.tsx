@@ -12,6 +12,7 @@ import DetailsModal from "./flatmate/details/DetailsModal";
 import RosterGrid from "./cleaning-roster/overview/RosterGrid";
 import AddPagination from "./flatmate/add/pagination/AddPagination";
 import AddRoom from "./cleaning-roster/add/AddRoom";
+import EditModal from "./cleaning-roster/edit/EditModal";
 
 
 const darkTheme = createTheme({
@@ -38,6 +39,7 @@ function App() {
                             <Route path={"/cleaning-roster"} element={<>
                                 <RosterGrid/>
                                 <AddModal element={<AddRoom/>}/>
+                                <EditModal/>
                             </>}/>
                         </Routes>
                     </BrowserRouter>

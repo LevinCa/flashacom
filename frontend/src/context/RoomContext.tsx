@@ -2,27 +2,44 @@ import {createContext, ReactElement, useEffect, useState} from "react";
 import {dummyRoom, Room} from "../model/Room";
 import axios from "axios";
 import {toast} from "react-toastify";
+import {Flatmate} from "../model/Flatmate";
 
 
 export const RoomProvider = createContext<{
     allRooms: Room[],
     currentRoom: Room,
     setCurrentRoom: (room: Room) => void,
-    post: (room: Room) => void
+    selectedAssignees: Flatmate[],
+    setSelectedAssignees: (flatmates: Flatmate[]) => void,
+    selectedAssigned: Flatmate[],
+    setSelectedAssigned: (flatmates: Flatmate[]) => void,
+    post: (room: Room) => void,
+    put: (list: string[]) => void,
+    deleteRoom: (id: string) => void
 }>({
     allRooms: [],
     currentRoom: dummyRoom,
     setCurrentRoom: () => {},
-    post: () => {}
+    selectedAssignees: [],
+    setSelectedAssignees: () => [],
+    selectedAssigned: [],
+    setSelectedAssigned: () => {},
+    post: () => {},
+    put: () => {},
+    deleteRoom: () => {}
 })
 
-export default function RoomContext(props: {children: ReactElement}) {
+export default function RoomContext(props: { children: ReactElement }) {
 
     const [allRooms, setAllRooms] = useState<Room[]>([])
     const [currentRoom, setCurrentRoom] = useState<Room>(dummyRoom)
+    const [selectedAssignees, setSelectedAssignees] = useState<Flatmate[]>([])
+    const [selectedAssigned, setSelectedAssigned] = useState<Flatmate[]>([])
 
     useEffect(
-        () => getAllRooms(),
+        () => {
+            getAllRooms()
+        },
         []
     )
 
@@ -41,12 +58,29 @@ export default function RoomContext(props: {children: ReactElement}) {
             .catch(() => toast.error("Failed to add Room"))
     }
 
+    function putAssignments(assignedList: string[]): void {
+        axios.put("api/room/" + currentRoom.id, assignedList)
+            .then(getAllRooms)
+    }
+
+    function deleteRoom(id: string) {
+        axios.delete("api/room/" + id)
+            .then(() => setAllRooms(allRooms.filter(room => room.id !== id)))
+            .catch(() => toast.error("Failed to delete Room"))
+    }
+
     return (
         <RoomProvider.Provider value={{
             allRooms: allRooms,
             currentRoom: currentRoom,
             setCurrentRoom: setCurrentRoom,
-            post: postNewRoom
+            selectedAssignees: selectedAssignees,
+            setSelectedAssignees: setSelectedAssignees,
+            selectedAssigned: selectedAssigned,
+            setSelectedAssigned: setSelectedAssigned,
+            post: postNewRoom,
+            put: putAssignments,
+            deleteRoom: deleteRoom
         }}>
             {props.children}
         </RoomProvider.Provider>

@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,7 +40,7 @@ class RoomIntegrationTest {
                 new ImageProperties(1, 1, 1, false, false, false),
                 0,
                 0,
-                Collections.emptyMap()
+                Collections.emptyList()
         );
         jsonRoom = mapper.writeValueAsString(dummyRoom);
         jsonRoomWithoutId = """
@@ -55,7 +56,7 @@ class RoomIntegrationTest {
                 },
                 "rowSpan":0,
                 "columnSpan":0,
-                "assignments":{}
+                "assignments":[]
                 }
                 """;
     }
@@ -96,5 +97,23 @@ class RoomIntegrationTest {
         Room expected = dummyRoom.withId(actual.id());
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DirtiesContext
+    void putRoomAssignments_expectRoomWithAssignments() throws Exception {
+        String postResponse = mockMvc.perform(post("/api/room")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRoom))
+                .andReturn().getResponse().getContentAsString();
+        Room before = mapper.readValue(postResponse, Room.class);
+        Room after = before.withAssignments(List.of("1"));
+        String jsonAfter = mapper.writeValueAsString(after);
+
+        mockMvc.perform(put("/api/room/".concat(before.id()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(List.of("1"))))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json(jsonAfter));
     }
 }

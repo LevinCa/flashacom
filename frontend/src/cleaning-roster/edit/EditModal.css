@@ -1,0 +1,102 @@
+.room-edit-modal {
+    display: flex;
+    z-index: 5;
+}
+
+.edit-room-flatmate-container {
+    display: flex;
+    cursor: pointer;
+    max-width: 100%;
+    align-items: center;
+    gap: 1rem;
+    background-color: #434343;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.5rem;
+    transition: all 400ms;
+}
+
+.edit-room-flatmate-container:hover {
+    box-shadow: rgba(255, 255, 255, 0.3) 0 1px 1px 0 inset, rgba(50, 50, 93, 0.5) 0 50px 100px -20px, rgba(0, 0, 0, 0.5) 0 30px 60px -30px;    transform: translateY(-0.3rem);
+}
+
+.edit-room-flatmate-container .flatmate-image-container {
+    height: 4rem;
+    aspect-ratio: 1 / 1;
+    width: auto;
+    margin-left: 0.5rem;
+}
+
+.edit-room-flatmate-container .flatmate-image-container:hover {
+    top: 0;
+    left: 0;
+}
+
+.room-edit-modal {
+    background-color: rgba(0,0,0,0.8);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.edit-room-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    background-color: #222222;
+    border-radius: 2rem;
+    align-items: center;
+    width: 35vw;
+    margin: 2rem;
+    height: 100%;
+    padding-bottom: 2rem;
+    transform: translate(0);
+}
+
+.edit-room-container .background-image-container {
+    z-index: -1;
+}
+.edit-room-assignees-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 100%;
+    gap: 1rem;
+    padding: 2rem;
+    overflow-y: scroll;
+}
+
+.edit-view-transfer-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.selected-flatmate {
+    border: #42A5F5 solid 2px;
+    background-color: #838383;
+}
+
+#room-delete-button {
+    position: absolute;
+    bottom: 1rem;
+}
+
+.edit-room-container h2 {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+@media screen and (max-width: 900px) {
+    .edit-room-flatmate-container {
+        flex-direction: column;
+    }
+}

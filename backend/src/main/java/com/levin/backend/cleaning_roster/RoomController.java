@@ -23,4 +23,15 @@ public class RoomController {
     public ResponseEntity<Room> postRoom(@RequestBody Room room) {
         return new ResponseEntity<>(roomService.saveNewRoom(room), HttpStatus.CREATED);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Room> putRoomAssignments(@PathVariable String id, @RequestBody List<String> assignments) {
+        return new ResponseEntity<>(roomService.editAssignments(id, assignments), HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteRoom(@PathVariable String id) {
+        roomService.deleteRoom(id);
+        return ResponseEntity.noContent().build();
+    }
 }

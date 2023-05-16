@@ -4,7 +4,7 @@ export type Room = {
     imageProperties: ImageProperties
     rowSpan: number,
     columnSpan: number,
-    assignments: Map<string, string>
+    assignments: string[]
 }
 
 export type ImageProperties = {
@@ -31,5 +31,5 @@ export const dummyRoom: Room = {
     imageProperties: dummyImageProperties,
     rowSpan: 1,
     columnSpan: 1,
-    assignments: Map.prototype
+    assignments: []
 }

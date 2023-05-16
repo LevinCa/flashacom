@@ -1,11 +1,14 @@
 import {Room} from "../../model/Room";
-import {useState} from "react";
+import {useContext} from "react";
+import {RoomProvider} from "../../context/RoomContext";
+import {FormProvider} from "../../context/FormContext";
 
 
 export default function RoomGridItem(props: { room: Room }) {
 
-    const [cssClasses, setCssClasses] = useState<string>(calcGridClass())
-    const [active, setActive] = useState<boolean>(false)
+    const roomContext = useContext(RoomProvider)
+    const formContext = useContext(FormProvider)
+    const cssClasses = calcGridClass()
     const saturate = () => {
         if (props.room.imageProperties.isBlackAndWhite) return 0
         else if (props.room.imageProperties.isOverSaturated) return 2
@@ -34,14 +37,13 @@ export default function RoomGridItem(props: { room: Room }) {
     }
 
     return (
-        <div className={"grid-item ".concat(cssClasses)}
-             style={{boxShadow: (props.room.assignments.size === 0) ? "0 0.5rem 1rem 0 rgba(200, 0, 0, 0.5)" : ""}}
-             onClick={() => {
-                 setActive(!active)
-                 active
-                     ? setCssClasses(cssClasses.concat(" active-grid-item"))
-                     : setCssClasses(cssClasses.replace("active-grid-item", ""))
-             }}>
+        <div
+            className={"grid-item ".concat(cssClasses).concat(props.room.assignments.length === 0 ? " unassigned-room" : "")}
+            onClick={() => {
+                roomContext.setCurrentRoom(props.room)
+                formContext.setRoomEditOpen(true)
+            }}
+        >
             <div className="background-image-container" style={style}></div>
             <p className="grid-item-name">{props.room.name}</p>
         </div>
