@@ -119,7 +119,7 @@ export default function AddRoom() {
                 },
                 rowSpan: rowSpan,
                 columnSpan: colSpan,
-                assignments: new Map<string, string>()
+                assignments: []
             }
             roomContext.post(newRoom)
             formContext.setAddModalOpen(false)

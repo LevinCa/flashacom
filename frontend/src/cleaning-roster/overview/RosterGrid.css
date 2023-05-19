@@ -40,31 +40,13 @@
     object-fit: cover;
 }
 
-@keyframes test {
-    from {
-        width: 2rem;
-        opacity: 0;
-    }
-    to {
-        width: 50vw;
-        opacity: 1;
-    }
+.unassigned-room.grid-item {
+    box-shadow: 0 0.5rem 1rem 0 rgba(200, 0, 0, 0.5);
+    border: 3px solid rgba(255, 0, 0, 0.5);
 }
 
-.active-grid-item {
-    position: fixed;
-    animation: test ease-in;
-    animation-duration: 500ms;
-    opacity: 1;
-    top: 3rem;
-    left: 3rem;
-    width: 50vw;
-    height: 85vh;
-    z-index: 3;
-}
-
-.active-grid-item:hover{
-    transform: none;
+.unassigned-room.grid-item:hover {
+    box-shadow: 0 1rem 2rem 0.2rem rgba(200, 0, 0, 0.25);
 }
 
 .grid-item-row-span-1-col-span-1 {
