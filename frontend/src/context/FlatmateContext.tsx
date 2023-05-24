@@ -47,6 +47,7 @@ export default function FlatmateContext(props: {children: ReactElement}) {
 
     useEffect(() => {
         checkUnassigned()
+        // eslint-disable-next-line
     },[roomContext.currentRoom])
 
     function checkUnassigned(): void {
