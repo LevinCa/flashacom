@@ -1,5 +1,7 @@
 package com.levin.backend.cleaning_roster;
 
+import com.levin.backend.community.Community;
+import com.levin.backend.community.CommunityService;
 import com.levin.backend.service.IdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,17 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final IdService idService;
+    private final CommunityService communityService;
 
     public List<Room> findAllRooms() {
-        return roomRepository.findAll();
+        Community community = communityService.findCurrentCommunity();
+        return roomRepository.findAllById(community.roomIds());
     }
 
     public Room saveNewRoom(Room room) {
-        return roomRepository.save(room.withId(idService.createId()));
+        Room newRoom = room.withId(idService.createId());
+        communityService.addRoom(newRoom);
+        return roomRepository.save(newRoom);
     }
 
     public Room editAssignments(String id, List<String> assignments) {
@@ -29,6 +35,8 @@ public class RoomService {
     }
 
     public void deleteRoom(String id) {
+        Room toDelete = roomRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        communityService.deleteRoom(toDelete);
         roomRepository.deleteById(id);
     }
 }
