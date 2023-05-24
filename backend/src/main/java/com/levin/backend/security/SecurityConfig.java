@@ -38,9 +38,9 @@ public class SecurityConfig {
                 .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase()))
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/user/**").permitAll()
-                .requestMatchers("/api/community").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/api/flatmate/**").authenticated()
+                .requestMatchers("/api/room/**").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .logout().logoutUrl("/api/user/logout")
                 .and().build();
