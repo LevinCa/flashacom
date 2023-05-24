@@ -1,11 +1,11 @@
-import {createContext, ReactElement, useEffect, useState} from "react";
+import {createContext, ReactElement, useContext, useEffect, useState} from "react";
 import {dummyRoom, Room} from "../model/Room";
 import axios from "axios";
 import {toast} from "react-toastify";
 import {Flatmate} from "../model/Flatmate";
+import {UserProvider} from "./UserContext";
 
-
-export const RoomProvider = createContext<{
+type contextType = {
     allRooms: Room[],
     currentRoom: Room,
     setCurrentRoom: (room: Room) => void,
@@ -16,7 +16,9 @@ export const RoomProvider = createContext<{
     post: (room: Room) => void,
     put: (list: string[]) => void,
     deleteRoom: (id: string) => void
-}>({
+}
+
+export const RoomProvider = createContext<contextType>({
     allRooms: [],
     currentRoom: dummyRoom,
     setCurrentRoom: () => {},
@@ -31,6 +33,8 @@ export const RoomProvider = createContext<{
 
 export default function RoomContext(props: { children: ReactElement }) {
 
+    const userContext = useContext(UserProvider)
+
     const [allRooms, setAllRooms] = useState<Room[]>([])
     const [currentRoom, setCurrentRoom] = useState<Room>(dummyRoom)
     const [selectedAssignees, setSelectedAssignees] = useState<Flatmate[]>([])
@@ -38,9 +42,9 @@ export default function RoomContext(props: { children: ReactElement }) {
 
     useEffect(
         () => {
-            getAllRooms()
+            if (userContext.user.username !== "" && userContext.user.username !== "anonymousUser") getAllRooms()
         },
-        []
+        [userContext.user]
     )
 
     function getAllRooms(): void {

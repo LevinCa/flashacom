@@ -4,9 +4,9 @@ import axios from "axios";
 import {toast} from "react-toastify";
 import {RoomProvider} from "./RoomContext";
 import {Room} from "../model/Room";
+import {UserProvider} from "./UserContext";
 
-
-export const FlatmateProvider = createContext<{
+type contextType = {
     allFlatmates: Flatmate[],
     currentFlatmate: Flatmate,
     detailsOpen: boolean,
@@ -17,7 +17,9 @@ export const FlatmateProvider = createContext<{
     deleteFlatmate: () => void,
     assignees: Flatmate[],
     setAssignees: (flatmate: Flatmate[]) => void
-}>({
+}
+
+export const FlatmateProvider = createContext<contextType>({
     allFlatmates: [],
     currentFlatmate: dummyFlatmate,
     detailsOpen: false,
@@ -33,14 +35,15 @@ export const FlatmateProvider = createContext<{
 export default function FlatmateContext(props: {children: ReactElement}) {
 
     const roomContext = useContext(RoomProvider)
+    const userContext = useContext(UserProvider)
     const [allFlatmates, setAllFlatmates] = useState<Flatmate[]>([])
     const [currentFlatmate, setCurrentFlatmate] = useState<Flatmate>(dummyFlatmate)
     const [openDetails, setOpenDetails] = useState<boolean>(false)
     const [unassigned, setUnassigned] = useState<Flatmate[]>([])
 
     useEffect(() => {
-        getAllFlatmates()
-    },[currentFlatmate])
+        if (userContext.user.username !== "" && userContext.user.username !== "anonymousUser") getAllFlatmates()
+    },[currentFlatmate, userContext.user])
 
     useEffect(() => {
         checkUnassigned()

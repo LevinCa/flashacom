@@ -1,5 +1,7 @@
 package com.levin.backend.flatmate;
 
+import com.levin.backend.community.Community;
+import com.levin.backend.community.CommunityService;
 import com.levin.backend.flatmate.model.Availability;
 import com.levin.backend.flatmate.model.Contact;
 import com.levin.backend.flatmate.model.EatingHabits;
@@ -9,10 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,9 +20,11 @@ class FlatmateServiceTest {
 
     private final FlatmateRepository flatmateRepository = mock(FlatmateRepository.class);
     private final IdService idService = mock(IdService.class);
-    private final FlatmateService flatmateService = new FlatmateService(flatmateRepository, idService);
+    private final CommunityService communityService = mock(CommunityService.class);
+    private final FlatmateService flatmateService = new FlatmateService(flatmateRepository, idService, communityService);
 
     private Flatmate dummyFlatmate;
+    private Community dummyCommunity;
 
 
     @BeforeEach
@@ -38,32 +39,47 @@ class FlatmateServiceTest {
                 new Contact("levin.cagatay@gmx.de", "12345678", "paypal.me/levincagatay"),
                 Availability.AT_HOME
         );
+        dummyCommunity = new Community(
+                "1",
+                "Test",
+                "",
+                Collections.emptySet(),
+                Collections.emptySet()
+        );
     }
 
 
     @Test
     void findAllFlatmates_expectedEmptyList_WhenRepositoryIsEmpty() {
         //Given
-        when(flatmateRepository.findAll())
+        when(communityService.findCurrentCommunity())
+                .thenReturn(dummyCommunity);
+        when(flatmateRepository.findAllById(dummyCommunity.flatmateIds()))
                 .thenReturn(Collections.emptyList());
 
         //When
         List<Flatmate> actual = flatmateService.findAllFlatmates();
 
         //Then
+        verify(communityService).findCurrentCommunity();
+        verify(flatmateRepository).findAllById(Collections.emptySet());
         assertThat(actual).isInstanceOf(List.class).isEmpty();
     }
 
     @Test
     void findAllFlatmates_expectedListWithOneEntry_WhenRepositoryContainsOneElement() {
         //Given
-        when(flatmateRepository.findAll())
+        when(communityService.findCurrentCommunity())
+                .thenReturn(dummyCommunity.withNewFlatmates(Set.of(dummyFlatmate.id())));
+        when(flatmateRepository.findAllById(Set.of(dummyFlatmate.id())))
                 .thenReturn(List.of(dummyFlatmate));
 
         //When
         List<Flatmate> actual = flatmateService.findAllFlatmates();
 
         //Then
+        verify(communityService).findCurrentCommunity();
+        verify(flatmateRepository).findAllById(Set.of("1"));
         assertThat(actual).isInstanceOf(List.class).containsExactly(dummyFlatmate);
     }
 

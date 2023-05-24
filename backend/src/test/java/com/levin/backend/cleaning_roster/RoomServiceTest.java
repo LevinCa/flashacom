@@ -1,14 +1,13 @@
 package com.levin.backend.cleaning_roster;
 
 import com.levin.backend.cleaning_roster.model.ImageProperties;
+import com.levin.backend.community.Community;
+import com.levin.backend.community.CommunityService;
 import com.levin.backend.service.IdService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,9 +16,11 @@ class RoomServiceTest {
 
     private final RoomRepository roomRepository = mock(RoomRepository.class);
     private final IdService idService = mock(IdService.class);
-    private final RoomService roomService = new RoomService(roomRepository, idService);
+    private final CommunityService communityService = mock(CommunityService.class);
+    private final RoomService roomService = new RoomService(roomRepository, idService, communityService);
 
     private Room dummyRoom;
+    private Community dummyCommunity;
 
 
     @BeforeEach
@@ -38,33 +39,46 @@ class RoomServiceTest {
                 0,
                 Collections.emptyList()
         );
+        dummyCommunity = new Community(
+                "1",
+                "Test",
+                "",
+                Collections.emptySet(),
+                Collections.emptySet()
+        );
     }
 
     @Test
     void findAllRooms_expectEmptyList_whenNoRoomsAreSaved() {
         //Given
-        when(roomRepository.findAll())
+        when(communityService.findCurrentCommunity())
+                .thenReturn(dummyCommunity);
+        when(roomRepository.findAllById(dummyCommunity.roomIds()))
                 .thenReturn(Collections.emptyList());
 
         //When
         List<Room> actual = roomService.findAllRooms();
 
         //Then
-        verify(roomRepository).findAll();
+        verify(communityService).findCurrentCommunity();
+        verify(roomRepository).findAllById(Collections.emptySet());
         assertThat(actual).isInstanceOf(List.class).isEmpty();
     }
 
     @Test
     void findAllRooms_expectListWithRoom_whenOneRoomIsSaved() {
         //Given
-        when(roomRepository.findAll())
+        when(communityService.findCurrentCommunity())
+                .thenReturn(dummyCommunity.withNewRooms(Set.of(dummyRoom.id())));
+        when(roomRepository.findAllById(Set.of(dummyRoom.id())))
                 .thenReturn(List.of(dummyRoom));
 
         //When
         List<Room> actual = roomService.findAllRooms();
 
         //Then
-        verify(roomRepository).findAll();
+        verify(communityService).findCurrentCommunity();
+        verify(roomRepository).findAllById(Set.of("123"));
         assertThat(actual).isInstanceOf(List.class).contains(dummyRoom);
     }
 

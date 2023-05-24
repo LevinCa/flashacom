@@ -1,5 +1,7 @@
 package com.levin.backend.flatmate;
 
+import com.levin.backend.community.Community;
+import com.levin.backend.community.CommunityService;
 import com.levin.backend.service.IdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,11 @@ public class FlatmateService {
 
     private final FlatmateRepository flatmateRepository;
     private final IdService idService;
+    private final CommunityService communityService;
 
     public List<Flatmate> findAllFlatmates() {
-        return flatmateRepository.findAll();
+        Community community = communityService.findCurrentCommunity();
+        return flatmateRepository.findAllById(community.flatmateIds());
     }
 
     public Flatmate saveFlatmate(Flatmate flatmate) {
@@ -29,6 +33,7 @@ public class FlatmateService {
                 flatmate.contact(),
                 flatmate.availability()
         );
+        communityService.addFlatmate(newFlatmate);
         return flatmateRepository.save(newFlatmate);
     }
 
@@ -42,6 +47,8 @@ public class FlatmateService {
     }
 
     public void deleteFlatmate(String id) {
-        flatmateRepository.delete(flatmateRepository.findById(id).orElseThrow(NoSuchElementException::new));
+        Flatmate toDelete = flatmateRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        communityService.deleteFlatmate(toDelete);
+        flatmateRepository.deleteById(id);
     }
 }
