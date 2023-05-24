@@ -20,6 +20,7 @@ export default function EditModal() {
 
     useEffect(
         () => setAssignments(),
+        // eslint-disable-next-line
         [roomContext.currentRoom]
     )
 
