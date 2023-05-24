@@ -3,3 +3,4 @@ flashacom.iml
 frontend.iml
 frontend/node_modules
 .idea
+backend/src/main/resources/static
